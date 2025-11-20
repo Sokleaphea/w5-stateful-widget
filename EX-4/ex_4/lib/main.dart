@@ -1,7 +1,112 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MaterialApp(
+      home: Scaffold(
+        backgroundColor: Colors.lightGreen,
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            ProgressBar(title: "My Score in Flutter"),
+            ProgressBar(title: "My Score in Dart"),
+            ProgressBar(title: "My Score in React"),
+          ],
+        ),
+      ),
+    ),
+  );
+}
+class ProgressBar extends StatefulWidget {
+  final String title;
+  const ProgressBar({super.key, required this.title});
+  @override
+  State<ProgressBar> createState() => _ProgressBarState();
+}
+
+class _ProgressBarState extends State<ProgressBar> {
+  double progress = 0.0;
+  void increase() {
+    setState(() {
+      progress += 0.4;
+      if (progress > 1) progress = 1;
+    });
+  }
+
+  void decrease() {
+    setState(() {
+      progress -= 0.4;
+      if (progress < 0) progress = 0;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        padding: EdgeInsets.all(30),
+        width: 550,
+        height: 250,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        alignment: Alignment.center,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Column(
+              children: [
+                Text(
+                  widget.title,
+                  style: TextStyle(
+                    fontSize: 24,
+                    color: Colors.grey,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    IconButton(onPressed: decrease, icon: Icon(Icons.remove)),
+                    const SizedBox(width: 40),
+                    IconButton(onPressed: increase, icon: Icon(Icons.add)),
+                  ],
+                ),
+                Stack(
+                  children: [
+                    Container(
+                      width: 500,
+                      height: 70,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(width: 1, color: Colors.grey),
+                      ),
+                    ),
+                    FractionallySizedBox(
+                      widthFactor: progress.clamp(0.0, 1),
+                      child: Container(
+                        height: 70,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [Colors.greenAccent, Colors.green],
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                          ),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
 
 class MyApp extends StatelessWidget {
